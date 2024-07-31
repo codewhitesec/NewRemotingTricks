@@ -1,6 +1,6 @@
 # Teaching the Old .NET Remoting New Exploitation Tricks
 
-This repository provides further details and resources on the [CODE WHITE blog post of the same name *Teaching the Old .NET Remoting New Tricks*](https://code-white.com/blog/teaching-old-net-remoting-new-exploitation-tricks/):
+This repository provides further details and resources on the [CODE WHITE blog post of the same name *Teaching the Old .NET Remoting New Exploitation Tricks*](https://code-white.com/blog/teaching-old-net-remoting-new-exploitation-tricks/):
 
 - `RemotingServer`: a restricted .NET Remoting server
 - `RemotingClient_MBRO`: a client that creates a `MarshalByRefObject` on the server
